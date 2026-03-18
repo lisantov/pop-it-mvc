@@ -1,6 +1,9 @@
 <?php
 
 namespace Src;
+
+use Error;
+
 class Application
 {
     public Settings $settings;
