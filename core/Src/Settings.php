@@ -25,4 +25,9 @@ class Settings
     {
         return '/'.$this->path['root'] ?? '';
     }
+
+    public function getViewsPath(): string
+    {
+        return '/'.$this->path['views'] ?? '';
+    }
 }

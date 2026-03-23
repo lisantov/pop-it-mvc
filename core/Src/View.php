@@ -47,17 +47,17 @@ class View
 
         if (file_exists($this->getPathToMain()) && file_exists($path)) {
 
-            //Импортирует переменные из массива в текущую таблицу символов
+            //Импортирт переменные из массива в текущую таблицу символов
             extract($data, EXTR_PREFIX_SAME, '');
 
             //Включение буферизации вывода
             ob_start();
-            require $path;
+            require_once $path;
             //Помещаем буфер в переменную и очищаем его
             $content = ob_get_clean();
 
             //Возвращаем собранную страницу
-            return require($this->getPathToMain());
+            return require_once($this->getPathToMain());
         }
         throw new Exception('Error render');
     }
