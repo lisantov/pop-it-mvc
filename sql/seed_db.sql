@@ -5,8 +5,7 @@ INSERT INTO posts (id, name, salary, salary_bonus, salary_penalty) VALUES
 
 INSERT INTO roles (id, name) VALUES
     (1, "Админ"),
-    (2, "Бухгалтер"),
-    (3, "Ноунейм");
+    (2, "Бухгалтер");
 
 INSERT INTO departments (id, name) VALUES
     (1, "Отдел разработки"),
@@ -33,14 +32,11 @@ INSERT INTO employees (
     inn,
     snils,
     account_number,
-    login,
-    password,
-    department_id,
-    role_id
+    department_id
 ) VALUES
-    (1, "Работник", "Работников", "Работникович", "123123123123", "12312312312",  "1234123412341234", NULL, NULL, 1, 3),
-    (2, "Бухгалтер", "Бухгалтеров", "Бухгалтерович", "321321321321", "32132132132",  "4321432143214321", "buhgalter", "buhgalter", 3, 2),
-    (3, "Админ", "Админов", "Админович", "999999999999", "99999999999",  "4444444444444444", "admin", "admin", 4, 1);
+    (1, "Работник", "Работников", "Работникович", "123123123123", "12312312312",  "1234123412341234", 1),
+    (2, "Бухгалтер", "Бухгалтеров", "Бухгалтерович", "321321321321", "32132132132",  "4321432143214321", 3),
+    (3, "Админ", "Админов", "Админович", "999999999999", "99999999999",  "4444444444444444", 4);
 
 INSERT INTO employee_posts (employee_id, post_id) VALUES
     (1, 2),
@@ -52,3 +48,7 @@ INSERT INTO accruals (id, employee_id, type_id, amount, month) VALUES
 
 INSERT INTO deductions (id, employee_id, type_id, amount, month) VALUES
     (1, 1, 3, 5000, "2026-05-09");
+
+INSERT INTO users (id, login, password, role_id, employee_id) VALUES
+    (1, "buhgalter", "buhgalter", 2, 2),
+    (2, "admin", "admin", 1, 3);

@@ -34,12 +34,8 @@ CREATE TABLE employees(
     inn VARCHAR(12) NOT NULL,
     snils VARCHAR(11) NOT NULL,
     account_number VARCHAR(255) NOT NULL,
-    login VARCHAR(255),
-    password VARCHAR(255),
     department_id INT,
-    role_id INT NOT NULL,
-    FOREIGN KEY (department_id) REFERENCES departments (id),
-    FOREIGN KEY (role_id) REFERENCES roles (id)
+    FOREIGN KEY (department_id) REFERENCES departments (id)
 );
 
 CREATE TABLE employee_posts(
@@ -67,4 +63,14 @@ CREATE TABLE accruals(
     month DATE NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employees (id),
     FOREIGN KEY (type_id) REFERENCES accrual_types (id)
+);
+
+CREATE TABLE users(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    login VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role_id INT NOT NULL,
+    employee_id INT NOT NULL ,
+    FOREIGN KEY (role_id) REFERENCES roles (id),
+    FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
