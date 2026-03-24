@@ -8,6 +8,20 @@ class Route
 {
     private static array $routes = [];
     private static string $prefix = '';
+    public function redirect(string $url): void
+    {
+        header('Location: ' . $this->getUrl($url));
+    }
+
+    public function getUrl(string $url): string
+    {
+        return self::$prefix . $url;
+    }
+
+    public function __construct(string $prefix = '')
+    {
+        self::setPrefix($prefix);
+    }
 
     public static function setPrefix($value)
     {

@@ -3,6 +3,11 @@
     "description": "Server-side practice",
     "type": "project",
     "license": "MIT",
+    "config": {
+      "platofrm": {
+        "php": "8.2"
+      }
+    },
     "authors": [
         {
             "name": "lisantov",
@@ -11,9 +16,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-      "php": "^7.4 | ^8.0",
-        "illuminate/database": "13.x-dev",
-        "illuminate/events": "13.x-dev"
+      "php": "^8.1",
+        "illuminate/database": "12.x-dev",
+        "illuminate/events": "12.x-dev"
     },
   "autoload": {
     "psr-4": {
