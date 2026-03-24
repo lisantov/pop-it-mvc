@@ -24,7 +24,7 @@ class Route
     public function start(): void
     {
         $path = explode('?', $_SERVER['REQUEST_URI'])[0];
-        $path = substr($path, strlen(self::$prefix) + 1);
+        $path = substr($path, strlen(self::$prefix));
 
         if (!array_key_exists($path, self::$routes)) {
             throw new Error('This path does not exist');
