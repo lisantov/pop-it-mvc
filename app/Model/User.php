@@ -57,13 +57,18 @@ class User extends Model implements IdentityInterface
         return $this->hasRole('admin');
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
     public function isFinancist(): bool
     {
         return $this->hasRole('financist');
-    }
-
-    public function getFullName(): string
-    {
-        return ($this->login);
     }
 }

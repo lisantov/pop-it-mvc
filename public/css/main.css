@@ -10,7 +10,7 @@ body {
 
 header {
     position: sticky;
-    top: 0;
+    top: 10px;
     display: flex;
     width: 100%;
     padding: 20px 24px;
@@ -52,7 +52,6 @@ a:hover::before {
 }
 
 main {
-    min-height: 150vh;
     padding: 40px 80px;
     display: flex;
     flex-direction: column;
@@ -95,6 +94,19 @@ button {
 button:hover {
     box-shadow: 0 0 6px #0000003D;
     opacity: 0.8;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
 }
 
 .message {

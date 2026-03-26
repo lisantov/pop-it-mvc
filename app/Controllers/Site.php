@@ -2,7 +2,8 @@
 
 namespace Controllers;
 
-use Model\Post;
+use Debug\DebugTools;
+use Model\Employee;
 use Model\User;
 use Src\View;
 use Src\Request;
@@ -12,12 +13,26 @@ class Site
 {
     public function index(Request $request): string
     {
-        return (new View())->render('site.hello', ['login' => Auth::user()->getFullName()]);
+        $fio = Employee::findIdentity(Auth::user()->employee_id)->getFullName();
+        return (new View())->render('site.hello', ['login' => $fio]);
     }
 
     public function admin(Request $request): string
     {
-        return (new View())->render('site.admin');
+        $message = '';
+        if ($request->method === 'POST' && User::create(array_merge($request->all(), ['role_id' => 2]))) {
+            $message = 'Пользователь успешно создан';
+        }
+
+        $financists = User::whereHas('role', function ($query) {
+            $query->where('name', 'financist');
+        })->get();
+        $freeEmployees = Employee::all();
+        return (new View())->render('site.admin', [
+            'financists' => $financists,
+            'employees' => $freeEmployees,
+            'message' => $message
+        ]);
     }
 
     public function financist(Request $request): string
