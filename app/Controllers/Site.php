@@ -27,7 +27,11 @@ class Site
         $financists = User::whereHas('role', function ($query) {
             $query->where('name', 'financist');
         })->get();
-        $freeEmployees = Employee::all();
+
+        $freeEmployees = Employee::whereNotIn('id', array_map(function ($item) {
+            return ($item['employee_id']);
+        }, User::all()->toArray()))->get();
+
         return (new View())->render('site.admin', [
             'financists' => $financists,
             'employees' => $freeEmployees,
@@ -45,6 +49,21 @@ class Site
             'name' => 'бухгалтера',
             'target' => Employee::findIdentity(User::find($request->get('id'))->employee_id)->getFullName(),
             'rollback' => app()->route->getUrl('admin')
+        ]);
+    }
+
+    public function editFinancist(Request $request): string
+    {
+        $user_id = $request->get('id');
+        if($request->method === 'POST') {
+            $financist = User::find($user_id);
+            $financist->login = $request->get('login');
+            $financist->save();
+            app()->route->redirect('admin');
+        }
+        return (new View())->render('site.updateFinancist', [
+            'target' => Employee::find(User::find($user_id)->employee_id)->getFullName(),
+            'id' => $user_id
         ]);
     }
 

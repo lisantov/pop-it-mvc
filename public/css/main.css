@@ -81,14 +81,20 @@ input:hover {
     box-shadow: 0 0 6px #0000003D;
 }
 
-button {
+button, .button {
     padding: 6px 12px;
     border-radius: 8px;
     background-color: #65aae8;
     border: 1px solid #4e95d5;
     cursor: pointer;
     color: #FFFFFF;
+    text-decoration: none;
     transition: 0.25s ease-in-out;
+}
+
+button.danger, .button.danger {
+    background-color: #d64d4d;
+    border-color: #b83f3f;
 }
 
 button:hover {

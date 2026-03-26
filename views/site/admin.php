@@ -35,10 +35,8 @@
                     <td><?= htmlspecialchars($financist->login) ?></td>
                     <td><?= $financist->password ?></td>
                     <td>
-                        <form action="admin/delete" method="get">
-                            <input type="text" name="id" hidden value="<?= $financist->id ?>">
-                            <button type="submit">Удалить</button>
-                        </form>
+                        <a class="button danger" href="admin/delete?id=<?= $financist->id ?>" type="submit">Удалить</a>
+                        <a class="button" href="admin/edit?id=<?= $financist->id ?>" type="submit">Редактировать</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
