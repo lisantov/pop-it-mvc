@@ -1,5 +1,5 @@
 <h2>Админ панель</h2>
-<div style="margin-top: 20px;display: grid; grid-template-columns: 1fr 1fr; gap: 60px">
+<div style="margin-top: 20px;display: grid; grid-template-columns: 1fr 2fr; gap: 60px">
     <div style="display: flex; flex-direction: column; gap: 10px">
         <h3>Добавить бухгалтера</h3>
         <form action="" method="POST">
@@ -25,6 +25,7 @@
                     <th>ID</th>
                     <th>Логин</th>
                     <th>Пароль</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +34,12 @@
                     <td><?= $financist->id ?></td>
                     <td><?= htmlspecialchars($financist->login) ?></td>
                     <td><?= $financist->password ?></td>
+                    <td>
+                        <form action="admin/delete" method="get">
+                            <input type="text" name="id" hidden value="<?= $financist->id ?>">
+                            <button type="submit">Удалить</button>
+                        </form>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

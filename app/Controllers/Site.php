@@ -35,6 +35,19 @@ class Site
         ]);
     }
 
+    public function deleteFinancist(Request $request): string
+    {
+        if($request->method === 'POST') {
+            User::destroy($request->get('id'));
+            app()->route->redirect('admin');
+        }
+        return (new View())->render('site.confirmDelete', [
+            'name' => 'бухгалтера',
+            'target' => Employee::findIdentity(User::find($request->get('id'))->employee_id)->getFullName(),
+            'rollback' => app()->route->getUrl('admin')
+        ]);
+    }
+
     public function financist(Request $request): string
     {
         return (new View())->render('site.financist');
