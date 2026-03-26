@@ -2,6 +2,7 @@
 
 namespace Src\Auth;
 
+use Debug\DebugTools;
 use Src\Session;
 
 class Auth

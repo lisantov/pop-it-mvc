@@ -4,8 +4,8 @@ INSERT INTO posts (id, name, salary, salary_bonus, salary_penalty) VALUES
     (3, "Директор", 100000, 15000, 1000);
 
 INSERT INTO roles (id, name) VALUES
-    (1, "Админ"),
-    (2, "Бухгалтер");
+    (1, "admin"),
+    (2, "financist");
 
 INSERT INTO departments (id, name) VALUES
     (1, "Отдел разработки"),
@@ -50,5 +50,5 @@ INSERT INTO deductions (id, employee_id, type_id, amount, month) VALUES
     (1, 1, 3, 5000, "2026-05-09");
 
 INSERT INTO users (id, login, password, role_id, employee_id) VALUES
-    (1, "buhgalter", "buhgalter", 2, 2),
-    (2, "admin", "admin", 1, 3);
+    (1, "buhgalter", (SELECT MD5("buhgalter")), 2, 2),
+    (2, "admin", (SELECT MD5("admin")), 1, 3);

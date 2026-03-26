@@ -12,21 +12,17 @@ class Site
 {
     public function index(Request $request): string
     {
-        $posts = Post::all();
-        return (new View())->render('site.post', ['posts' => $posts]);
+        return (new View())->render('site.hello', ['login' => Auth::user()->getFullName()]);
     }
 
-    public function hello(): string
+    public function admin(Request $request): string
     {
-        return new View('site.hello', ['message' => 'hello working']);
+        return (new View())->render('site.admin');
     }
 
-    public function signup(Request $request): string
+    public function financist(Request $request): string
     {
-        if ($request->method === 'POST' && User::create($request->all())) {
-            app()->route->redirect('');
-        }
-        return new View('site.signup');
+        return (new View())->render('site.financist');
     }
 
     public function login(Request $request): string
@@ -37,7 +33,7 @@ class Site
         }
         //Если удалось аутентифицировать пользователя, то редирект
         if (Auth::attempt($request->all())) {
-            app()->route->redirect('hello');
+            app()->route->redirect('');
         }
         //Если аутентификация не удалась, то сообщение об ошибке
         return new View('site.login', ['message' => 'Неправильные логин или пароль']);
@@ -46,6 +42,6 @@ class Site
     public function logout(): void
     {
         Auth::logout();
-        app()->route->redirect('hello');
+        app()->route->redirect('login');
     }
 }

@@ -2,8 +2,10 @@
 
 namespace Model;
 
+use Debug\DebugTools;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Model\Role;
 use Src\Auth\IdentityInterface;
 
 class User extends Model implements IdentityInterface
@@ -43,5 +45,25 @@ class User extends Model implements IdentityInterface
     {
         return self::where(['login' => $credentials['login'],
             'password' => md5($credentials['password'])])->first();
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return Role::findIdentity($this->role_id)->name == $role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function isFinancist(): bool
+    {
+        return $this->hasRole('financist');
+    }
+
+    public function getFullName(): string
+    {
+        return ($this->login);
     }
 }
