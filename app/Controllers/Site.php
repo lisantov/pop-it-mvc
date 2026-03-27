@@ -69,15 +69,25 @@ class Site
     public function editFinancist(Request $request): string
     {
         $user_id = $request->get('id');
+        $errors = [];
         if($request->method === 'POST') {
-            $financist = User::find($user_id);
-            $financist->login = $request->get('login');
-            $financist->save();
-            app()->route->redirect('admin');
+            $validator = new Validator($request->all(), [
+                'login' => ['required', 'unique:users,login'],
+            ]);
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+            }
+            else {
+                $financist = User::find($user_id);
+                $financist->login = $request->get('login');
+                $financist->save();
+                app()->route->redirect('admin');
+            }
         }
         return (new View())->render('site.updateFinancist', [
             'target' => Employee::find(User::find($user_id)->employee_id)->getFullName(),
-            'id' => $user_id
+            'id' => $user_id,
+            'errors' => $errors
         ]);
     }
 
@@ -88,16 +98,27 @@ class Site
 
     public function login(Request $request): string
     {
+        $errors = [];
         //Если просто обращение к странице, то отобразить форму
         if ($request->method === 'GET') {
             return new View('site.login');
         }
-        //Если удалось аутентифицировать пользователя, то редирект
-        if (Auth::attempt($request->all())) {
-            app()->route->redirect('');
+        else {
+            $validator = new Validator($request->all(), [
+                'login' => ['required', 'unique:users,login'],
+            ]);
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+            }
+            elseif (Auth::attempt($request->all())) {
+                app()->route->redirect('');
+            }
         }
         //Если аутентификация не удалась, то сообщение об ошибке
-        return new View('site.login', ['message' => 'Неправильные логин или пароль']);
+        return new View('site.login', [
+            'message' => 'Неправильные логин или пароль',
+            'errors' => $errors
+        ]);
     }
 
     public function logout(): void

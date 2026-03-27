@@ -7,7 +7,9 @@ if (!app()->auth::check()):
     <form method="post">
         <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>
         <label>Логин <input type="text" name="login"></label>
+        <span class="error"><?= $errors['login'][0] ?></span>
         <label>Пароль <input type="password" name="password"></label>
+        <span class="error"><?= $errors['password'][0] ?></span>
         <button>Войти</button>
         <h3 class="message"><?= $message ?? ''; ?></h3>
     </form>
