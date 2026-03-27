@@ -5,6 +5,7 @@ namespace Controllers;
 use Debug\DebugTools;
 use Model\Employee;
 use Model\User;
+use Src\Validator\Validator;
 use Src\View;
 use Src\Request;
 use Src\Auth\Auth;
@@ -19,11 +20,6 @@ class Site
 
     public function admin(Request $request): string
     {
-        $message = '';
-        if ($request->method === 'POST' && User::create(array_merge($request->all(), ['role_id' => 2]))) {
-            $message = 'Пользователь успешно создан';
-        }
-
         $financists = User::whereHas('role', function ($query) {
             $query->where('name', 'financist');
         })->get();
@@ -32,10 +28,28 @@ class Site
             return ($item['employee_id']);
         }, User::all()->toArray()))->get();
 
+        $message = '';
+        $errors = [];
+
+        if ($request->method === 'POST') {
+            $validator = new Validator($request->all(), [
+                'login' => ['required', 'unique:users,login'],
+                'password' => ['required'],
+                'employee_id' => ['required', 'unique:users,employee_id'],
+            ]);
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+            }
+            elseif (User::create(array_merge($request->all(), ['role_id' => 2]))) {
+                $message = 'Пользователь успешно создан';
+            }
+        }
+
         return (new View())->render('site.admin', [
             'financists' => $financists,
             'employees' => $freeEmployees,
-            'message' => $message
+            'message' => $message,
+            'errors' => $errors
         ]);
     }
 

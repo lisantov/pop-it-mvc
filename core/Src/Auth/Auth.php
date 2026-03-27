@@ -43,6 +43,13 @@ class Auth
         return self::$user->findIdentity($id);
     }
 
+    public static function generateCSRF(): string
+    {
+        $token = md5(time());
+        Session::set('csrf_token', $token);
+        return $token;
+    }
+
     //Проверка является ли текущий пользователь аутентифицированным
     public static function check(): bool
     {

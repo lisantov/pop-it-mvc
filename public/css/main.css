@@ -116,7 +116,15 @@ th, td {
 }
 
 .message {
-    font-size: 16px;
-    font-family: monospace;
-    color: #4c7ba6;
+    font-size: 14px;
+    font-family: sans-serif;
+    color: #4ca6a6;
+}
+
+.error {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    font-family: sans-serif;
+    color: #d64d4d;
 }
