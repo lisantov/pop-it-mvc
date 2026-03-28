@@ -23,6 +23,9 @@
     </div>
     <div style="display: flex; flex-direction: column; gap: 10px">
         <h3>Все бухгалтеры</h3>
+        <form>
+            <label style="width: 100%; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center">Поиск<input value="<?= $search ?>" type="search" name="search"></label>
+        </form>
         <table>
             <thead>
                 <tr>
@@ -33,17 +36,23 @@
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($financists as $financist): ?>
+            <?php if ($financists): ?>
+                <?php foreach ($financists as $financist): ?>
+                    <tr>
+                        <td><?= $financist['id'] ?></td>
+                        <td><?= htmlspecialchars($financist['login']) ?></td>
+                        <td><?= $financist['password'] ?></td>
+                        <td>
+                            <a class="button danger" href="<?= app()->route->getUrl('admin/delete').'?id='.$financist->id ?>" type="submit">Удалить</a>
+                            <a class="button" href="<?= app()->route->getUrl('admin/edit').'?id='.$financist->id ?>" type="submit">Редактировать</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?= $financist->id ?></td>
-                    <td><?= htmlspecialchars($financist->login) ?></td>
-                    <td><?= $financist->password ?></td>
-                    <td>
-                        <a class="button danger" href="<?= app()->route->getUrl('admin/delete').'?id='.$financist->id ?>" type="submit">Удалить</a>
-                        <a class="button" href="<?= app()->route->getUrl('admin/edit').'?id='.$financist->id ?>" type="submit">Редактировать</a>
-                    </td>
+                    <td colspan="4">Бухгалтеров с логином '<?= $search ?>' не найдено</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endif; ?>
             </tbody>
         </table>
     </div>

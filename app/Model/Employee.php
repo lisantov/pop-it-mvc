@@ -27,9 +27,22 @@ class Employee extends Model
         return self::where('id', $id)->first();
     }
 
-    //Выборка сотрудника по первичному ключу
     public function getFullName()
     {
         return ($this->last_name.' '.$this->first_name.' '.($this->patronymic ?? ''));
+    }
+
+    public function getDepartmentName()
+    {
+        return Department::find($this->department_id)->name;
+    }
+
+    public function getSalary()
+    {
+        $salary = 0;
+        foreach (EmployeePost::getEmployeePosts($this->id) as $post) {
+            $salary += (int)$post->salary;
+        }
+        return $salary;
     }
 }

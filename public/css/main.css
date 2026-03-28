@@ -97,6 +97,12 @@ button.danger, .button.danger {
     border-color: #b83f3f;
 }
 
+button.ghost, .button.ghost {
+    background-color: #ffffff;
+    border-color: #4c7ba6;
+    color: #4c7ba6;
+}
+
 button:hover {
     box-shadow: 0 0 6px #0000003D;
     opacity: 0.8;

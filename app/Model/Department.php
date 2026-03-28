@@ -2,22 +2,20 @@
 
 namespace Model;
 
+use Debug\DebugTools;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Department extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
-    protected $table = 'posts';
     protected $fillable = [
-        'name',
-        'salary',
-        'salary_bonus',
-        'salary_penalty',
+        'name'
     ];
 
-    //Выборка должности по первичному ключу
+    //Выборка сотрудника по первичному ключу
     public static function findIdentity(int $id)
     {
         return self::where('id', $id)->first();

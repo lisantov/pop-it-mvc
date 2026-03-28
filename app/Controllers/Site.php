@@ -20,9 +20,15 @@ class Site
 
     public function admin(Request $request): string
     {
-        $financists = User::whereHas('role', function ($query) {
-            $query->where('name', 'financist');
-        })->get();
+        $search = $request->get('search');
+        $financists = array_filter(
+            User::whereHas('role', function ($query) {
+                $query->where('name', 'financist');
+            })->get()->toArray(),
+            function ($user) use ($search) {
+                return !$search || str_contains($user['login'], $search);
+            }
+        );
 
         $freeEmployees = Employee::whereNotIn('id', array_map(function ($item) {
             return ($item['employee_id']);
@@ -49,7 +55,8 @@ class Site
             'financists' => $financists,
             'employees' => $freeEmployees,
             'message' => $message,
-            'errors' => $errors
+            'errors' => $errors,
+            'search' => $search,
         ]);
     }
 
@@ -93,7 +100,33 @@ class Site
 
     public function financist(Request $request): string
     {
-        return (new View())->render('site.financist');
+        $employees = Employee::all();
+        return (new View())->render('site.financist', [
+            'employees' => $employees,
+        ]);
+    }
+
+    public function financistStats(Request $request): string
+    {
+        $employee_id = $request->get('id');
+        $period = (int)$request->get('period') > 0 ? (int)$request->get('period') : 1;
+        $employee = Employee::find($employee_id);
+        $salary = $employee->getSalary($period);
+        $transactions = [];
+
+        for ($i = 0; $i < $period; $i++) {
+            $transactions[] = [
+                'name' => 'Заработная плата',
+                'result' => $salary
+            ];
+        }
+
+        return (new View())->render('site.financistStats', [
+            'period' => $period,
+            'employee' => $employee,
+            'salary' => $salary,
+            'transactions' => array_reverse($transactions),
+        ]);
     }
 
     public function login(Request $request): string
@@ -105,7 +138,7 @@ class Site
         }
         else {
             $validator = new Validator($request->all(), [
-                'login' => ['required', 'unique:users,login'],
+                'login' => ['required'],
             ]);
             if ($validator->fails()) {
                 $errors = $validator->errors();
