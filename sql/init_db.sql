@@ -41,6 +41,7 @@ CREATE TABLE deductions(
     name VARCHAR(255) NOT NULL,
     amount NUMERIC NOT NULL,
     month_left INT NOT NULL,
+    file VARCHAR(255),
     FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
 
@@ -50,6 +51,7 @@ CREATE TABLE accruals(
     name VARCHAR(255) NOT NULL,
     amount NUMERIC NOT NULL,
     month_left INT NOT NULL,
+    file VARCHAR(255),
     FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
 
@@ -58,7 +60,7 @@ CREATE TABLE users(
     login VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role_id INT NOT NULL,
-    employee_id INT NOT NULL ,
+    employee_id INT NOT NULL,
     FOREIGN KEY (role_id) REFERENCES roles (id),
     FOREIGN KEY (employee_id) REFERENCES employees (id)
 );

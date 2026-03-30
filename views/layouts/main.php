@@ -31,6 +31,7 @@
             if (app()->auth::user()->isFinancist()):
                 ?>
                 <a class="col text-center" href="<?= app()->route->getUrl('financist') ?>">Управление сотрудниками</a>
+                <a class="col text-center" href="<?= app()->route->getUrl('financist/departments') ?>">Подразделения</a>
             <?php
             endif;
             ?>

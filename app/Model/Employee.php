@@ -37,6 +37,11 @@ class Employee extends Model
         return Department::find($this->department_id)->name;
     }
 
+    public static function getByDepartmentId(int $id)
+    {
+        return self::where('department_id', $id)->get();
+    }
+
     public function getSalary()
     {
         $salary = 0;

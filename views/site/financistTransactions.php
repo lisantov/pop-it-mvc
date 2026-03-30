@@ -10,6 +10,7 @@
         <th>Объём</th>
         <th>Осталось месяцев</th>
         <th>Действия</th>
+        <th>Связанный файл</th>
     </tr>
     </thead>
     <tbody>
@@ -20,9 +21,16 @@
                 <td><?= $transaction->name ?></td>
                 <td><?= $transaction->amount ?></td>
                 <td><?= $transaction->month_left ?></td>
-                <td>
+                <td style="display: flex; gap: 4px">
                     <a class="button danger" href="<?= app()->route->getUrl('financist/'.$entities.'/delete?id=').$transaction->id ?>">Удалить</a>
                     <a class="button" href="<?= app()->route->getUrl('financist/'.$entities.'/edit?id=').$transaction->id ?>">Редактировать</a>
+                </td>
+                <td>
+                    <?php if ($transaction->file): ?>
+                        <a class="button" href="<?= app()->settings->getRootPath().$transaction->file ?>">Перейти</a>
+                    <?php else: ?>
+                        <a class="button" href="<?= app()->route->getUrl('financist/'.$entities.'/upload?id=').$transaction->id ?>">Добавить файл</a>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>

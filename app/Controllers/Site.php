@@ -5,6 +5,7 @@ namespace Controllers;
 use Debug\DebugTools;
 use Model\Accrual;
 use Model\Deduction;
+use Model\Department;
 use Model\Employee;
 use Model\User;
 use Src\Validator\Validator;
@@ -161,6 +162,40 @@ class Site
         ]);
     }
 
+    public function financistDepartments(Request $request): string
+    {
+        $departments = Department::all()->toArray();
+
+        $departments_average = [];
+
+        foreach ($departments as $department) {
+            $average = 0;
+            $count = 0;
+            $employees = Employee::getByDepartmentId($department['id']);
+
+            foreach ($employees as $employee) {
+                $average += (int)$employee->getSalary();
+                $count++;
+            }
+
+            $average = $average != 0
+                ? $count != 0
+                    ? $average / $count
+                    : 0
+                : 0;
+
+
+            $departments_average[] = [
+                'name' => $department['name'],
+                'average' => $average
+            ];
+        }
+
+        return (new View())->render('site.financistDepartments', [
+            'departments' => $departments_average,
+        ]);
+    }
+
     public function financistAccruals(Request $request): string
     {
         $employee_id = $request->get('id');
@@ -255,7 +290,60 @@ class Site
             'name' => 'надбавку',
             'rollback' => app()->route->getUrl('financist/accruals?id=' . $accrual->employee_id),
         ]);
-    }public function financistDeductions(Request $request): string
+    }
+
+    public function uploadAccrualnFile(Request $request): string
+    {
+        $accrual_id = $request->get('id');
+        $accrual = Deduction::find($accrual_id);
+        $employee = Employee::find($accrual->employee_id);
+
+        if ($request->method === 'POST') {
+            $files = $request->files();
+            if (isset($files['file']) && $files['file']['error'] === UPLOAD_ERR_OK) {
+                $file = $files['file'];
+
+                $originalName = $file['name'];
+                $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+                $newFileName = 'accrual_' . $accrual_id . '_' . time() . '.' . $extension;
+
+                $rootPath = $_SERVER['DOCUMENT_ROOT'];
+
+                $targetDir = $rootPath . '/public/uploads/';
+                $targetPath = $targetDir . $newFileName;
+
+                if (!is_writable($rootPath)) {
+                    DebugTools::log('Корневая папка недоступна для записи: ' . $rootPath);
+                }
+                if (!is_dir($targetDir)) {
+                    if (!mkdir($targetDir, 0755, true)) {
+                        DebugTools::log('Не удалось создать директорию: ' . $targetDir);
+                    }
+                }
+                if (!is_writable($targetDir)) {
+                    DebugTools::log('Директория недоступна для записи: ' . $targetDir);
+                }
+
+                if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                    $relativePath = 'uploads/' . $newFileName;
+                    $accrual->file = $relativePath;
+                    $accrual->save();
+
+                    app()->route->redirect('financist/accruals?id=' . $accrual->employee_id);
+                } else {
+                    DebugTools::log('Не удалось переместить файл');
+                }
+            }
+        }
+
+        return (new View())->render('site.uploadFile', [
+            'target' => $employee->getFullName(),
+            'name' => 'надбваке',
+            'rollback' => app()->route->getUrl('financist/accruals?id=' . $accrual->employee_id),
+        ]);
+    }
+
+    public function financistDeductions(Request $request): string
     {
         $employee_id = $request->get('id');
         $employee = Employee::find($employee_id);
@@ -337,17 +425,68 @@ class Site
     public function deleteDeduction(Request $request): string
     {
         $deduction_id = $request->get('id');
-        $deduction = Accrual::find($deduction_id);
+        $deduction = Deduction::find($deduction_id);
         $employee = Employee::find($deduction->employee_id);
 
         if ($request->method === 'POST') {
-            Accrual::destroy($deduction_id);
+            Deduction::destroy($deduction_id);
             app()->route->redirect('financist/deductions?id=' . $deduction->employee_id);
         }
 
         return (new View())->render('site.confirmDelete', [
             'target' => $employee->getFullName(),
             'name' => 'вычет',
+            'rollback' => app()->route->getUrl('financist/deductions?id=' . $deduction->employee_id),
+        ]);
+    }
+
+    public function uploadDeductionFile(Request $request): string
+    {
+        $deduction_id = $request->get('id');
+        $deduction = Deduction::find($deduction_id);
+        $employee = Employee::find($deduction->employee_id);
+
+        if ($request->method === 'POST') {
+            $files = $request->files();
+            if (isset($files['file']) && $files['file']['error'] === UPLOAD_ERR_OK) {
+                $file = $files['file'];
+
+                $originalName = $file['name'];
+                $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+                $newFileName = 'deduction_' . $deduction_id . '_' . time() . '.' . $extension;
+
+                $rootPath = $_SERVER['DOCUMENT_ROOT'];
+
+                $targetDir = $rootPath . '/public/uploads/';
+                $targetPath = $targetDir . $newFileName;
+
+                if (!is_writable($rootPath)) {
+                    DebugTools::log('Корневая папка недоступна для записи: ' . $rootPath);
+                }
+                if (!is_dir($targetDir)) {
+                    if (!mkdir($targetDir, 0755, true)) {
+                        DebugTools::log('Не удалось создать директорию: ' . $targetDir);
+                    }
+                }
+                if (!is_writable($targetDir)) {
+                    DebugTools::log('Директория недоступна для записи: ' . $targetDir);
+                }
+
+                if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                    $relativePath = 'uploads/' . $newFileName;
+                    $deduction->file = $relativePath;
+                    $deduction->save();
+
+                    app()->route->redirect('financist/deductions?id=' . $deduction->employee_id);
+                } else {
+                    DebugTools::log('Не удалось переместить файл');
+                }
+            }
+        }
+
+        return (new View())->render('site.uploadFile', [
+            'target' => $employee->getFullName(),
+            'name' => 'вычету',
             'rollback' => app()->route->getUrl('financist/deductions?id=' . $deduction->employee_id),
         ]);
     }
