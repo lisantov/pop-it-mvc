@@ -13,17 +13,6 @@ INSERT INTO departments (id, name) VALUES
     (3, "Отдел бухгалтеров"),
     (4, "Высшие чины");
 
-INSERT INTO deduction_types (id, name) VALUES
-    (1, "Кредит"),
-    (2, "Ипотека"),
-    (3, "Алименты"),
-    (4, "Налог на налог");
-
-INSERT INTO accrual_types (id, name) VALUES
-    (1, "Премия"),
-    (2, "Грант"),
-    (3, "Щедрость директора");
-
 INSERT INTO employees (
     id,
     first_name,
@@ -43,11 +32,11 @@ INSERT INTO employee_posts (employee_id, post_id) VALUES
     (2, 1),
     (3, 3);
 
-INSERT INTO accruals (id, employee_id, type_id, amount, month) VALUES
-    (1, 1, 3, 15000, "2026-05-09");
+INSERT INTO accruals (id, employee_id, name, amount, month_left) VALUES
+    (1, 1, 'Щедрость директора', 15000, 3);
 
-INSERT INTO deductions (id, employee_id, type_id, amount, month) VALUES
-    (1, 1, 3, 5000, "2026-05-09");
+INSERT INTO deductions (id, employee_id, name, amount, month_left) VALUES
+    (1, 1, 'Алименты', 5000, 5);
 
 INSERT INTO users (id, login, password, role_id, employee_id) VALUES
     (1, "buhgalter", (SELECT MD5("buhgalter")), 2, 2),

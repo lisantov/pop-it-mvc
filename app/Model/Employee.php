@@ -45,4 +45,14 @@ class Employee extends Model
         }
         return $salary;
     }
+
+    public function getAccruals()
+    {
+        return Accrual::getEmployeeAccruals($this->id);
+    }
+
+    public function getDeductions()
+    {
+        return Deduction::getEmployeeDeductions($this->id);
+    }
 }

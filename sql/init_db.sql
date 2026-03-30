@@ -16,16 +16,6 @@ CREATE TABLE posts(
     salary_penalty NUMERIC NOT NULL
 );
 
-CREATE TABLE deduction_types(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE accrual_types(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE employees(
     id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
@@ -48,21 +38,19 @@ CREATE TABLE employee_posts(
 CREATE TABLE deductions(
     id INT PRIMARY KEY AUTO_INCREMENT,
     employee_id INT NOT NULL,
-    type_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
     amount NUMERIC NOT NULL,
-    month DATE NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employees (id),
-    FOREIGN KEY (type_id) REFERENCES deduction_types (id)
+    month_left INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
 
 CREATE TABLE accruals(
     id INT PRIMARY KEY AUTO_INCREMENT,
     employee_id INT NOT NULL,
-    type_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
     amount NUMERIC NOT NULL,
-    month DATE NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employees (id),
-    FOREIGN KEY (type_id) REFERENCES accrual_types (id)
+    month_left INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
 
 CREATE TABLE users(

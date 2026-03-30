@@ -12,7 +12,7 @@
 <table>
     <thead>
     <tr>
-        <th>ID</th>
+        <th>Месяц</th>
         <th>Операция</th>
         <th>Объём</th>
     </tr>
@@ -20,12 +20,17 @@
     <tbody>
     <?php if ($transactions): ?>
         <?php foreach ($transactions as $key => $transaction): ?>
-            <tr>
-                <td><?= $key ?></td>
+            <tr style="background-color: <?= (int)$key % 2 === 0 ? '#EFEFEF' : '#FFFFFF' ?>">
+                <td><?= $transaction['month'] ?></td>
                 <td><?= $transaction['name'] ?></td>
                 <td><?= $transaction['result'] ?></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
+    <tr>
+        <td>Итого</td>
+        <td></td>
+        <td><?= $sum ?></td>
+    </tr>
     </tbody>
 </table>
