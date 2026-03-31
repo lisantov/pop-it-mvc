@@ -43,8 +43,8 @@
                         <td><?= htmlspecialchars($financist['login']) ?></td>
                         <td><?= $financist['password'] ?></td>
                         <td>
-                            <a class="button danger" href="<?= app()->route->getUrl('admin/delete').'?id='.$financist->id ?>" type="submit">Удалить</a>
-                            <a class="button" href="<?= app()->route->getUrl('admin/edit').'?id='.$financist->id ?>" type="submit">Редактировать</a>
+                            <a class="button danger" href="<?= app()->route->getUrl('admin/delete').'?id='.$financist['id'] ?>" type="submit">Удалить</a>
+                            <a class="button" href="<?= app()->route->getUrl('admin/edit').'?id='.$financist['id'] ?>" type="submit">Редактировать</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

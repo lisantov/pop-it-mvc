@@ -69,9 +69,10 @@ class Site
             User::destroy($request->get('id'));
             app()->route->redirect('admin');
         }
+        $user = User::find($request->get('id'));
         return (new View())->render('site.confirmDelete', [
             'name' => 'бухгалтера',
-            'target' => Employee::findIdentity(User::find($request->get('id'))->employee_id)->getFullName(),
+            'target' => Employee::find($user->employee_id)->getFullName(),
             'rollback' => app()->route->getUrl('admin')
         ]);
     }
