@@ -15,7 +15,7 @@ return [
         'specialChars' => \Middlewares\SpecialCharsMiddleware::class,
     ],
     'validators' => [
-        'required' => \Validators\RequireValidator::class,
-        'unique' => \Validators\UniqueValidator::class
+        'required' => \BasicValidators\Validators\RequireValidator::class,
+        'unique' => \BasicValidators\Validators\UniqueValidator::class
     ]
 ];

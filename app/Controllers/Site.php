@@ -8,7 +8,7 @@ use Model\Deduction;
 use Model\Department;
 use Model\Employee;
 use Model\User;
-use Src\Validator\Validator;
+use BasicValidators\Validator\Validator;
 use Src\View;
 use Src\Request;
 use Src\Auth\Auth;
@@ -502,6 +502,7 @@ class Site
         else {
             $validator = new Validator($request->all(), [
                 'login' => ['required'],
+                'password' => ['required'],
             ]);
             if ($validator->fails()) {
                 $errors = $validator->errors();
