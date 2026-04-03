@@ -21,7 +21,8 @@
         "illuminate/events": "12.x-dev",
         "nikic/fast-route": "^2.0@dev",
         "lisantov/collect": "dev-master",
-        "lisantov/validators": "dev-master"
+        "lisantov/validators": "dev-master",
+        "monolog/monolog": "^3.0@dev"
     },
   "autoload": {
     "psr-4": {

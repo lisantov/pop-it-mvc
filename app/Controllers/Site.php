@@ -9,6 +9,8 @@ use Model\Department;
 use Model\Employee;
 use Model\User;
 use BasicValidators\Validator\Validator;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Src\View;
 use Src\Request;
 use Src\Auth\Auth;
@@ -217,9 +219,14 @@ class Site
 
     public function addAccrual(Request $request): string
     {
-        $employee_id = $request->get('id');
+        $employee_id = $request->all()['id'];
+//        $log = new Logger('accrualWatcher');
+//        $log->pushHandler(new StreamHandler(__DIR__ . '../../logs/accrualWatcher.log'), Logger::INFO);
+//        $log->info('current method: ' . $request->method . ' request all: ' . print_r($request->all(), true));
+//        $log->info('param: ' . $employee_id);
         $employee = Employee::find($employee_id);
         $errors = [];
+        $message = '';
 
         if ($request->method === 'POST') {
             $validator = new Validator($request->all(), [
@@ -230,7 +237,8 @@ class Site
             if ($validator->fails()) {
                 $errors = $validator->errors();
             }
-            elseif (Accrual::create($request->all())) {
+            elseif (Accrual::create(array_merge($request->all(), ['employee_id' => $employee_id]))) {
+                $message = 'Надбавка успешно добавлена';
                 app()->route->redirect('financist/accruals?id=' . $employee_id);
             }
         }
@@ -239,7 +247,8 @@ class Site
             'id' => $employee_id,
             'name' => 'надбавки',
             'employee' => $employee,
-            'errors' => $errors
+            'errors' => $errors,
+            'message' => $message
         ]);
     }
 
