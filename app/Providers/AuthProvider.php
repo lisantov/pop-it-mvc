@@ -17,7 +17,10 @@ class AuthProvider extends AbstractProvider
         $authClass = $this->app->settings->getAuthClassName();
         $identityClass = $this->app->settings->getIdentityClassName();
 
-        $authClass::init(new $identityClass);
+        $uri = substr($_SERVER['REQUEST_URI'], strlen($this->app->settings->getRootPath()));
+        if (!str_starts_with($uri, 'api')) {
+            $authClass::init(new $identityClass);
+        }
         $this->app->bind('auth', new $authClass);
     }
 }

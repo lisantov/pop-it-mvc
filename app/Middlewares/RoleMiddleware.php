@@ -10,8 +10,11 @@ class RoleMiddleware
 {
     public function handle(Request $request, string $role)
     {
-        //Если пользователь не имеет нужной роли, то редирект на главную
-        if (!Auth::user()->hasRole($role)) {
+        if (!Auth::user() || !Auth::user()->hasRole($role)) {
+            $header = $request->headers['Authorization'] ?? '';
+            if (str_starts_with($header, 'Bearer ')) {
+                (new \Src\View())->toJSON(['error' => 'forbidden'], 403);
+            }
             app()->route->redirect('');
         }
     }

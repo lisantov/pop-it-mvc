@@ -72,4 +72,9 @@ class User extends Model implements IdentityInterface
     {
         return $this->hasRole('financist');
     }
+
+    public function findIdentityByToken(string $token)
+    {
+        return self::where('token', $token)->first();
+    }
 }

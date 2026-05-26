@@ -10,6 +10,9 @@ class Auth
     //Свойство для хранения любого класса, реализующего интерфейс IdentityInterface
     private static IdentityInterface $user;
 
+    //Токен-аутентифицированный пользователь (для API)
+    private static ?IdentityInterface $tokenUser = null;
+
     //Инициализация класса пользователя
     public static function init(IdentityInterface $user): void
     {
@@ -39,8 +42,22 @@ class Auth
     //Возврат текущего аутентифицированного пользователя
     public static function user()
     {
+        if (self::$tokenUser) {
+            return self::$tokenUser;
+        }
         $id = Session::get('id') ?? 0;
         return self::$user->findIdentity($id);
+    }
+
+    //Аутентификация по Bearer токену
+    public static function attemptByToken(string $token): bool
+    {
+        $user = self::$user->findIdentityByToken($token);
+        if ($user) {
+            self::$tokenUser = $user;
+            return true;
+        }
+        return false;
     }
 
     public static function generateCSRF(): string
@@ -63,6 +80,7 @@ class Auth
     public static function logout(): bool
     {
         Session::clear('id');
+        self::$tokenUser = null;
         return true;
     }
 

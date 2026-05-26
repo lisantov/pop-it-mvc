@@ -25,6 +25,13 @@ class Middleware
         $this->middlewareCollector->addGroup($prefix, $callback);
     }
 
+    public static function withGroup(string $prefix, callable $callback): void
+    {
+        self::single()->middlewareCollector->addGroup($prefix, function () use ($callback) {
+            $callback();
+        });
+    }
+
     //Конструктор скрыт. Вызывается только один раз
     private function __construct()
     {

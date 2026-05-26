@@ -37,8 +37,9 @@ class Route
     //Добавляет префикс для обозначенных маршрутов
     public static function group(string $prefix, callable $callback): void
     {
-        self::single()->routeCollector->addGroup($prefix, $callback);
-        Middleware::single()->group($prefix, $callback);
+        self::single()->routeCollector->addGroup($prefix, function () use ($prefix, $callback) {
+            Middleware::withGroup($prefix, $callback);
+        });
     }
 
     //Конструктор скрыт. Вызывается только один раз

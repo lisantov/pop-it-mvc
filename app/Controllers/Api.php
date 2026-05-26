@@ -8,7 +8,6 @@ use Model\Post;
 use Model\User;
 use Src\Request;
 use Src\View;
-use Debug\DebugTools;
 
 class Api
 {
@@ -86,7 +85,7 @@ class Api
         ]);
         if ($validator->fails()) {
             $errors = $validator->errors();
-            (new View())->toJSON(['errors' => $errors], 401);
+            (new View())->toJSON(['errors' => $errors], 400);
         }
         else {
             $financist = User::find($id);
@@ -106,7 +105,7 @@ class Api
         ]);
         if ($validator->fails()) {
             $errors = $validator->errors();
-            (new View())->toJSON(['errors' => $errors], 401);
+            (new View())->toJSON(['errors' => $errors], 400);
         }
         elseif (User::create(array_merge($request->all(), ['role_id' => 2]))) {
             (new View())->toJSON(['message' =>'Created successfully'], 201);
