@@ -302,10 +302,10 @@ class Site
         ]);
     }
 
-    public function uploadAccrualnFile(Request $request): string
+    public function uploadAccrualFile(Request $request): string
     {
         $accrual_id = $request->get('id');
-        $accrual = Deduction::find($accrual_id);
+        $accrual = Accrual::find($accrual_id);
         $employee = Employee::find($accrual->employee_id);
 
         if ($request->method === 'POST') {
