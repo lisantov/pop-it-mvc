@@ -13,6 +13,7 @@ return [
         'csrf' => \Middlewares\CSRFMiddleware::class,
         'trim' => \Middlewares\TrimMiddleware::class,
         'specialChars' => \Middlewares\SpecialCharsMiddleware::class,
+        'json' => \Middlewares\JSONMiddleware::class,
     ],
     'validators' => [
         'required' => \BasicValidators\Validators\RequireValidator::class,

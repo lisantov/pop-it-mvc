@@ -61,6 +61,7 @@ CREATE TABLE users(
     password VARCHAR(255) NOT NULL,
     role_id INT NOT NULL,
     employee_id INT NOT NULL,
+    token VARCHAR(255),
     FOREIGN KEY (role_id) REFERENCES roles (id),
     FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
